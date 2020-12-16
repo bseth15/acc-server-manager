@@ -9,7 +9,7 @@
   "private": true,
   "scripts": {
     "start": "node ./server/server.js",
-    "server": "nodemon ./server/server.js"
+    "server": "del mongodb.log && concurrently \"mongod --port=27017 --dbpath=./database --auth --logpath=mongodb.log --logRotate=reopen --logappend\" \"nodemon ./server/server.js\""
   },
   "dependencies": {
     "concurrently": "^5.3.0",
