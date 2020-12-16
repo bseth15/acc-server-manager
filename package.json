@@ -8,8 +8,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "node ./server/bin/www",
-    "server": "nodemon ./server/bin/www"
+    "start": "node ./server/server.js",
+    "server": "nodemon ./server/server.js"
   },
   "dependencies": {
     "concurrently": "^5.3.0",
