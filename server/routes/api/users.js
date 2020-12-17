@@ -7,6 +7,7 @@ const { onSuccess, onFailure } = require('../utilities/responder');
 
 const User = require('../../models/User');
 const authOptions = config.authOptions;
+const selectOptions = User.safeSelectOptions;
 
 /**
  * Create a User
@@ -36,7 +37,7 @@ router.post('/authorize', (req, res) => {
   const password = req.body.password;
   User.findOne({ username: username })
     .then(user => {
-      if (!user) throw new Error('User does not exist');
+      if (!user) throw 'Incorrect log credentials';
       else return user;
     })
     .then(user =>
@@ -44,7 +45,7 @@ router.post('/authorize', (req, res) => {
         .compare(password, user.password)
         .then(isMatch => {
           if (isMatch) return user;
-          else throw new Error('Incorrect log credentials');
+          else throw 'Incorrect log credentials';
         })
         .catch(error => {
           throw error;
@@ -68,7 +69,7 @@ router.post('/authorize', (req, res) => {
  */
 router.get('/', passport.authenticate(...authOptions), (req, res) => {
   User.find()
-    .select(User.safeSelectOptions)
+    .select(selectOptions)
     .sort({ username: 1 })
     .then(users => res.json(onSuccess('Successfully retrieved Users', users)))
     .catch(error => res.json(onFailure('Unable to retrieve Users', error)));
@@ -81,9 +82,9 @@ router.get('/', passport.authenticate(...authOptions), (req, res) => {
  */
 router.get('/:id', passport.authenticate(...authOptions), (req, res) => {
   User.findById(req.params.id)
-    .select(User.safeSelectOptions)
+    .select(selectOptions)
     .then(user => {
-      if (!user) throw new Error('User does not exist');
+      if (!user) throw 'User does not exist';
       else return user;
     })
     .then(users => res.json(onSuccess('Successfully retrieved User', users)))
@@ -98,7 +99,7 @@ router.get('/:id', passport.authenticate(...authOptions), (req, res) => {
 router.put('/:id', passport.authenticate(...authOptions), (req, res) => {
   const { _id, ...updateFields } = req.body;
   User.findByIdAndUpdate(req.params.id, { $set: { ...updateFields } }, { new: true })
-    .select(User.safeSelectOptions)
+    .select(selectOptions)
     .then(user => res.json(onSuccess('Successfully updated User', user)))
     .catch(error => res.json(onFailure('Unable to update User', error)));
 });

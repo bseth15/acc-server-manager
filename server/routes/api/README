@@ -1,4 +1,0 @@
-api routes return json data
-
-Any server rendering (ex. using template engine)
-routes should be placed in a different directory
