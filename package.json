@@ -12,9 +12,15 @@
     "server": "del mongodb.log && concurrently \"mongod --port=27017 --dbpath=./database --auth --logpath=mongodb.log --logRotate=reopen --logappend\" \"nodemon ./server/server.js\""
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "concurrently": "^5.3.0",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mongoose": "^5.11.8"
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.8",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "validator": "^13.5.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.6"
