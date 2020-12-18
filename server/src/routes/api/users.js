@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
-const config = require('../../config/database');
+const config = require('../../config/passport');
 const jwt = require('jsonwebtoken');
 const { onSuccess, onFailure } = require('../utilities/responder');
 
@@ -37,7 +37,7 @@ router.post('/authorize', (req, res) => {
   const password = req.body.password;
   User.findOne({ username: username })
     .then(user => {
-      if (!user) throw 'Incorrect log credentials';
+      if (!user) throw 'Incorrect log in credentials';
       else return user;
     })
     .then(user =>
@@ -45,7 +45,7 @@ router.post('/authorize', (req, res) => {
         .compare(password, user.password)
         .then(isMatch => {
           if (isMatch) return user;
-          else throw 'Incorrect log credentials';
+          else throw 'Incorrect log in credentials';
         })
         .catch(error => {
           throw error;
@@ -55,7 +55,7 @@ router.post('/authorize', (req, res) => {
       const { password, ...rest } = user.toJSON();
       return {
         user: { ...rest },
-        token: 'JWT ' + jwt.sign(user.toJSON(), config.secret, { expiresIn: 86400 }),
+        token: 'JWT ' + jwt.sign(user.toJSON(), process.env.JWT_SECRET, { expiresIn: 86400 }),
       };
     })
     .then(body => res.json(onSuccess('Successfully authenticated User', body)))
@@ -93,10 +93,10 @@ router.get('/:id', passport.authenticate(...authOptions), (req, res) => {
 
 /**
  * Update a User with the given id, body must contain object with updated fields
- * @route PUT api/users/:id
+ * @route PATCH api/users/:id
  * @access Private
  */
-router.put('/:id', passport.authenticate(...authOptions), (req, res) => {
+router.patch('/:id', passport.authenticate(...authOptions), (req, res) => {
   const { _id, ...updateFields } = req.body;
   User.findByIdAndUpdate(req.params.id, { $set: { ...updateFields } }, { new: true })
     .select(selectOptions)
@@ -109,7 +109,7 @@ router.put('/:id', passport.authenticate(...authOptions), (req, res) => {
  * @route DELETE api/users/:id
  * @access Private
  */
-router.put('/:id', passport.authenticate(...authOptions), (req, res) => {
+router.delete('/:id', passport.authenticate(...authOptions), (req, res) => {
   User.findByIdAndDelete(req.params.id)
     .then(user => {
       if (user) res.json(onSuccess('Successfully deleted User', null));

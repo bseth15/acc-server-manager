@@ -2,19 +2,21 @@
   "name": "acc-server-manager",
   "version": "0.1.0",
   "description": "Dockerized server management application for Assetto Corsa Competizione built using the MERN stack.",
-  "main": "./server/server.js",
+  "main": "server.js",
   "repository": "https://github.com/bseth15/acc-server-manager",
   "author": "Seth Brown",
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "node ./server/server.js",
-    "server": "del mongodb.log && concurrently \"mongod --port=27017 --dbpath=./database --auth --logpath=mongodb.log --logRotate=reopen --logappend\" \"nodemon ./server/server.js\""
+    "start": "node -r dotenv/config server.js",
+    "watch": "nodemon -r dotenv/config server.js",
+    "dev": "concurrently \"mongod --port=27017 --dbpath=../database --auth\" \"yarn watch\""
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "concurrently": "^5.3.0",
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.8",
