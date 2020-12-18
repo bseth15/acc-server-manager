@@ -5,7 +5,7 @@ services:
     container_name: accsm-server
     build:
       context: server/.
-      dockerfile: Dockerfile.dev
+      dockerfile: ../docker/server/Dockerfile.dev
     command: npm run devStart
     restart: always
     networks:
@@ -13,7 +13,8 @@ services:
     ports:
       - '$SERVER_PORT:$SERVER_PORT'
     volumes:
-      - ./server/:/code
+      - ./server/:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
     environment:
       - PORT=${SERVER_PORT}
       - MONGO_URI=${MONGO_URI}
@@ -24,8 +25,8 @@ services:
   mongo:
     container_name: accsm-mongodb
     build:
-      context: server/.
-      dockerfile: Dockerfile.db
+      context: docker/database/.
+      dockerfile: Dockerfile
     command: [--auth]
     restart: always
     networks:
@@ -45,3 +46,6 @@ networks:
   accsm-network:
     name: accsm-network
     driver: bridge
+
+volumes:
+  node_modules:
