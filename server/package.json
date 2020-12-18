@@ -4,8 +4,8 @@
   "description": "Dockerized server management application for Assetto Corsa Competizione built using the MERN stack.",
   "main": "server.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node -r dotenv/config server.js",
-    "devStart": "cross-env NODE_ENV=development nodemon -r dotenv/config server.js"
+    "start": "cross-env NODE_ENV=production node server.js",
+    "devStart": "cross-env NODE_ENV=development nodemon server.js"
   },
   "repository": {
     "type": "git",

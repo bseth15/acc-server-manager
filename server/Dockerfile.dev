@@ -3,8 +3,8 @@
 FROM node:alpine
 
 # Create App Directory
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+RUN mkdir -p /code
+WORKDIR /code
 
 # Install Dependencies
 COPY package*.json ./
@@ -12,7 +12,3 @@ RUN npm ci
 
 # Copy app source code
 COPY . .
-
-EXPOSE 3000
-
-CMD ["npm", "startDev"]
