@@ -61,7 +61,7 @@ typings/
 .next
 
 # Database
-database/
+.database/
 
 # vscode
 .vscode/
