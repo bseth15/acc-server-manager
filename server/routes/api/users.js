@@ -38,7 +38,7 @@ router.post('/authorize', (req, res) => {
   const password = req.body.password;
   User.findOne({ username: username })
     .then(user => {
-      if (!user) throw 'Incorrect log in credentials';
+      if (!user) throw 'Incorrect login credentials';
       else return user;
     })
     .then(user =>
@@ -46,7 +46,7 @@ router.post('/authorize', (req, res) => {
         .compare(password, user.password)
         .then(isMatch => {
           if (isMatch) return user;
-          else throw 'Incorrect log in credentials';
+          else throw 'Incorrect login credentials';
         })
         .catch(error => {
           throw error;
