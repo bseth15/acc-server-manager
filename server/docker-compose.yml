@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  app-server:
+    build: .
+    container_name: accsm-node-express
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - accsm-network
+    ports:
+      - '8080:8080'
+    depends_on:
+      - mongo
+    env_file: .env
+
+  mongo:
+    image: mongo
+    container_name: accsm-mongodb
+    networks:
+      - accsm-network
+    ports:
+      - '27017:27017'
+    volumes:
+      - ../database:/data/db
+
+networks:
+  accsm-network:
+    driver: bridge

@@ -9,8 +9,7 @@
   "private": true,
   "scripts": {
     "start": "node -r dotenv/config server.js",
-    "watch": "nodemon -r dotenv/config server.js",
-    "dev": "concurrently \"mongod --port=27017 --dbpath=../database --auth\" \"yarn watch\""
+    "dev": "nodemon -r dotenv/config server.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

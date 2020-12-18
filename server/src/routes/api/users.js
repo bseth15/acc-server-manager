@@ -8,6 +8,7 @@ const { onSuccess, onFailure } = require('../utilities/responder');
 const User = require('../../models/User');
 const authOptions = config.authOptions;
 const selectOptions = User.safeSelectOptions;
+const saltRounds = 10;
 
 /**
  * Create a User
@@ -17,7 +18,7 @@ const selectOptions = User.safeSelectOptions;
 router.post('/', (req, res) => {
   let newUser = new User({ ...req.body });
   bcrypt
-    .genSalt(10)
+    .genSalt(saltRounds)
     .then(salt => bcrypt.hash(newUser.password, salt))
     .then(hash => {
       newUser.password = hash;
@@ -97,7 +98,7 @@ router.get('/:id', passport.authenticate(...authOptions), (req, res) => {
  * @access Private
  */
 router.patch('/:id', passport.authenticate(...authOptions), (req, res) => {
-  const { _id, ...updateFields } = req.body;
+  const { _id, password, ...updateFields } = req.body;
   User.findByIdAndUpdate(req.params.id, { $set: { ...updateFields } }, { new: true })
     .select(selectOptions)
     .then(user => res.json(onSuccess('Successfully updated User', user)))
