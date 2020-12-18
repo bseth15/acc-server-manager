@@ -1,21 +1,19 @@
 const mongoose = require('mongoose');
 
-const options = {
-  useNewUrlParser: true,
-  useFindAndModify: false,
-  useCreateIndex: true,
-  useUnifiedTopology: true,
-  autoIndex: false,
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false,
+      useCreateIndex: true,
+      autoIndex: false,
+    });
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
+  }
 };
 
-const { MONGO_HOSTNAME, MONGO_DB, MONGO_PORT, MONGO_USER, MONGO_PASSWORD } = process.env;
-
-const dbConnectionURL = {
-  LOCAL: `mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}`,
-};
-
-mongoose
-  .connect(dbConnectionURL.LOCAL, options)
-  .then(() => console.log(`[mongoose] connected to mongodb at ${MONGO_HOSTNAME}:${MONGO_PORT}`))
-  .then(() => console.log(`[mongoose] using ${MONGO_DB} database`))
-  .catch(error => console.log(`[mongoose] ${error}`));
+module.exports = connectDB;

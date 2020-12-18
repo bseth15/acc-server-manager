@@ -3,12 +3,9 @@
   "version": "0.1.0",
   "description": "Dockerized server management application for Assetto Corsa Competizione built using the MERN stack.",
   "main": "server.js",
-  "type": "module",
   "scripts": {
-    "start": "node -r dotenv/config src/server.js",
-    "server": "nodemon -r dotenv/config src/server.js",
-    "client": "npm run start --prefix ../client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "start": "cross-env NODE_ENV=production node -r dotenv/config server.js",
+    "devStart": "cross-env NODE_ENV=development nodemon -r dotenv/config server.js"
   },
   "repository": {
     "type": "git",
@@ -24,16 +21,21 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "concurrently": "^5.3.0",
+    "connect-mongo": "^3.2.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-session": "^1.17.1",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
     "mongoose": "^5.11.8",
+    "morgan": "^1.10.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "validator": "^13.5.2"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "nodemon": "^2.0.6"
   }
 }
