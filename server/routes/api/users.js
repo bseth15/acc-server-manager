@@ -98,7 +98,7 @@ router.get('/:id', passport.authenticate(...authOptions), (req, res) => {
  * @access Private
  */
 router.patch('/:id', passport.authenticate(...authOptions), (req, res) => {
-  const { _id, password, ...updateFields } = req.body;
+  const { _id, password, joined, ...updateFields } = req.body;
   User.findByIdAndUpdate(req.params.id, { $set: { ...updateFields } }, { new: true })
     .select(selectOptions)
     .then(user => res.json(onSuccess('Successfully updated User', user)))
