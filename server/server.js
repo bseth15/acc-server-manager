@@ -28,6 +28,7 @@ app.use('/api/tracks', require('./routes/api/tracks'));
 app.use('/api/car-models', require('./routes/api/carModels'));
 app.use('/api/car-groups', require('./routes/api/carGroups'));
 app.use('/api/driver-categories', require('./routes/api/driverCategories'));
+app.use('/api/cup-categories', require('./routes/api/cupCategories'));
 app.use('/api/session-types', require('./routes/api/sessionTypes'));
 
 // Start server
