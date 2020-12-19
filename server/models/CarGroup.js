@@ -3,9 +3,9 @@ const { Schema, model } = require('mongoose');
 const User = require('./User');
 
 /**
- * Schema definition for the Track model.
+ * Schema definition for the Car Group model.
  */
-const trackSchema = new Schema({
+const carGroupSchema = new Schema({
   hidden: {
     type: Boolean,
     default: true,
@@ -19,30 +19,12 @@ const trackSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  name: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  privateServerSlots: {
-    type: Number,
-    required: true,
-  },
-  season: {
-    type: Number,
-    required: true,
-  },
   value: {
     type: String,
     required: true,
-    unique: true,
     trim: true,
-    lowercase: true,
-  },
-  uniquePitBoxes: {
-    type: Number,
-    required: true,
+    unique: true,
   },
 });
 
-module.exports = model('Track', trackSchema);
+module.exports = model('CarGroup', carGroupSchema);

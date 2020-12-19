@@ -16,4 +16,4 @@ module.exports.onFailure = function (message, error) {
   return { success: false, msg: message, body: null, error: error };
 };
 
-module.exports.noMongo__V = ['-__v'];
+module.exports.patchOptions = { new: true, runValidators: true };
