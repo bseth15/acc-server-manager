@@ -1,8 +1,8 @@
 version: '3.9'
 
 services:
-  server:
-    container_name: accsm-server
+  node:
+    container_name: accsm-node
     build:
       context: server/.
       dockerfile: ../docker/server/Dockerfile.dev
@@ -13,17 +13,18 @@ services:
     ports:
       - '$SERVER_PORT:$SERVER_PORT'
     volumes:
-      - ./server/:/usr/src/app
-      - node_modules:/usr/src/app/node_modules
+      - ./server/:/opt/accsm/code
+      - accsm-node_modules:/opt/accsm/node_modules
     environment:
       - PORT=${SERVER_PORT}
       - MONGO_URI=${MONGO_URI}
       - JWT_SECRET=${JWT_SECRET}
+      - NODE_ENV=${NODE_ENV}
     depends_on:
       - mongo
 
   mongo:
-    container_name: accsm-mongodb
+    container_name: accsm-mongo
     build:
       context: docker/database/.
       dockerfile: Dockerfile
@@ -48,4 +49,4 @@ networks:
     driver: bridge
 
 volumes:
-  node_modules:
+  accsm-node_modules:

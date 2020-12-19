@@ -61,15 +61,4 @@ const userSchema = new Schema({
 
 module.exports = model('User', userSchema);
 
-module.exports.safeSelectOptions = [
-  '_id',
-  'avatar',
-  'biography',
-  'email',
-  'hidden',
-  'joined',
-  'role',
-  'steamId',
-  'username',
-  '__v',
-];
+module.exports.safeSelectOptions = ['-password'];
