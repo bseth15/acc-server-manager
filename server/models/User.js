@@ -71,4 +71,5 @@ module.exports.safeSelectOptions = [
   'role',
   'steamId',
   'username',
+  '__v',
 ];

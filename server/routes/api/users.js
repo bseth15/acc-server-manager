@@ -3,7 +3,7 @@ const passport = require('passport');
 const bcrypt = require('bcryptjs');
 const config = require('../../config/passport');
 const jwt = require('jsonwebtoken');
-const { onSuccess, onFailure } = require('../utilities/responder');
+const { onSuccess, onFailure, patchOptions } = require('../utilities/responder');
 
 const User = require('../../models/User');
 const authOptions = config.authOptions;
@@ -99,7 +99,7 @@ router.get('/:id', passport.authenticate(...authOptions), (req, res) => {
  */
 router.patch('/:id', passport.authenticate(...authOptions), (req, res) => {
   const { _id, password, joined, ...updateFields } = req.body;
-  User.findByIdAndUpdate(req.params.id, { $set: { ...updateFields } }, { new: true })
+  User.findByIdAndUpdate(req.params.id, { $set: { ...updateFields } }, patchOptions)
     .select(selectOptions)
     .then(user => res.status(200).json(onSuccess('Successfully updated User', user)))
     .catch(error => res.status(400).json(onFailure('Unable to update User', error)));

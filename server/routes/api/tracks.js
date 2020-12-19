@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const passport = require('passport');
 const config = require('../../config/passport');
-const { onSuccess, onFailure, noMongo__V } = require('../utilities/responder');
+const { onSuccess, onFailure, patchOptions } = require('../utilities/responder');
 
 const Track = require('../../models/Track');
 const authOptions = config.authOptions;
@@ -15,6 +15,9 @@ router.post('/', passport.authenticate(...authOptions), (req, res) => {
   let newTrack = new Track({ ...req.body });
   newTrack
     .save()
+    .then(track => {
+      return Track.findById(track._id).populate('lastModifiedBy', ['username', 'email']);
+    })
     .then(track => res.status(200).json(onSuccess('Successfully added Track', track)))
     .catch(error => res.status(400).json(onFailure('Unable to add Track', error)));
 });
@@ -26,7 +29,7 @@ router.post('/', passport.authenticate(...authOptions), (req, res) => {
  */
 router.get('/', passport.authenticate(...authOptions), (req, res) => {
   Track.find()
-    .select(noMongo__V)
+    .populate('lastModifiedBy', ['username', 'email'])
     .sort({ value: 1 })
     .then(tracks => res.status(200).json(onSuccess('Successfully retrieved Tracks', tracks)))
     .catch(error => res.status(400).json(onFailure('Unable to retrieve Tracks', error)));
@@ -39,7 +42,7 @@ router.get('/', passport.authenticate(...authOptions), (req, res) => {
  */
 router.get('/:id', passport.authenticate(...authOptions), (req, res) => {
   Track.findById(req.params.id)
-    .select(noMongo__V)
+    .populate('lastModifiedBy', ['username', 'email'])
     .then(track => {
       if (!track) throw 'Track does not exist';
       else return track;
@@ -55,7 +58,8 @@ router.get('/:id', passport.authenticate(...authOptions), (req, res) => {
  */
 router.patch('/:id', passport.authenticate(...authOptions), (req, res) => {
   const { _id, ...updateFields } = req.body;
-  Track.findByIdAndUpdate(req.params.id, { $set: { ...updateFields } }, { new: true })
+  Track.findByIdAndUpdate(req.params.id, { $set: { ...updateFields } }, patchOptions)
+    .populate('lastModifiedBy', ['username', 'email'])
     .then(track => res.status(200).json(onSuccess('Successfully updated Track', track)))
     .catch(error => res.status(400).json(onFailure('Unable to update Track', error)));
 });
