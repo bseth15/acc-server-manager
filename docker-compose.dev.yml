@@ -6,7 +6,7 @@ services:
     build:
       context: server/.
       dockerfile: ../docker/server/Dockerfile.dev
-    command: npm run devStart
+    command: bash -c "rm -rf /opt/accsm/code/node_modules/* && nodemon -L server.js"
     restart: always
     networks:
       - accsm-network
