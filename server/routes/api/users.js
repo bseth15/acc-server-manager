@@ -24,8 +24,8 @@ router.post('/', (req, res) => {
       newUser.password = hash;
       newUser.save();
     })
-    .then(() => res.json(onSuccess('Successfully registered User', null)))
-    .catch(error => res.json(onFailure('Unable to register User', error)));
+    .then(() => res.status(200).json(onSuccess('Successfully registered User', null)))
+    .catch(error => res.status(400).json(onFailure('Unable to register User', error)));
 });
 
 /**
@@ -59,12 +59,12 @@ router.post('/authorize', (req, res) => {
         token: 'JWT ' + jwt.sign(user.toJSON(), process.env.JWT_SECRET, { expiresIn: 86400 }),
       };
     })
-    .then(body => res.json(onSuccess('Successfully authenticated User', body)))
-    .catch(error => res.json(onFailure('Unable to authenticate User', error)));
+    .then(body => res.status(200).json(onSuccess('Successfully authenticated User', body)))
+    .catch(error => res.status(400).json(onFailure('Unable to authenticate User', error)));
 });
 
 /**
- * Retrieve all users
+ * Retrieve all Users
  * @route GET api/users
  * @access Private
  */
@@ -72,12 +72,12 @@ router.get('/', passport.authenticate(...authOptions), (req, res) => {
   User.find()
     .select(selectOptions)
     .sort({ username: 1 })
-    .then(users => res.json(onSuccess('Successfully retrieved Users', users)))
-    .catch(error => res.json(onFailure('Unable to retrieve Users', error)));
+    .then(users => res.status(200).json(onSuccess('Successfully retrieved Users', users)))
+    .catch(error => res.status(400).json(onFailure('Unable to retrieve Users', error)));
 });
 
 /**
- * Retrieve a user
+ * Retrieve a User
  * @route GET api/users/:id
  * @access Private
  */
@@ -88,12 +88,12 @@ router.get('/:id', passport.authenticate(...authOptions), (req, res) => {
       if (!user) throw 'User does not exist';
       else return user;
     })
-    .then(users => res.json(onSuccess('Successfully retrieved User', users)))
-    .catch(error => res.json(onFailure('Unable to retrieve User', error)));
+    .then(user => res.status(200).json(onSuccess('Successfully retrieved User', user)))
+    .catch(error => res.status(400).json(onFailure('Unable to retrieve User', error)));
 });
 
 /**
- * Update a User with the given id, body must contain object with updated fields
+ * Update a User at the given id, body must contain object with update fields
  * @route PATCH api/users/:id
  * @access Private
  */
@@ -101,22 +101,22 @@ router.patch('/:id', passport.authenticate(...authOptions), (req, res) => {
   const { _id, password, joined, ...updateFields } = req.body;
   User.findByIdAndUpdate(req.params.id, { $set: { ...updateFields } }, { new: true })
     .select(selectOptions)
-    .then(user => res.json(onSuccess('Successfully updated User', user)))
-    .catch(error => res.json(onFailure('Unable to update User', error)));
+    .then(user => res.status(200).json(onSuccess('Successfully updated User', user)))
+    .catch(error => res.status(400).json(onFailure('Unable to update User', error)));
 });
 
 /**
- * Delete a User with the given id
+ * Delete a User at the given id
  * @route DELETE api/users/:id
  * @access Private
  */
 router.delete('/:id', passport.authenticate(...authOptions), (req, res) => {
   User.findByIdAndDelete(req.params.id)
     .then(user => {
-      if (user) res.json(onSuccess('Successfully deleted User', null));
-      else res.json(onFailure('User does not exist', null));
+      if (user) res.status(200).json(onSuccess('Successfully deleted User', null));
+      else res.status(400).json(onFailure('User does not exist', null));
     })
-    .catch(error => res.json(onFailure('Unable to delete User', error)));
+    .catch(error => res.status(400).json(onFailure('Unable to delete User', error)));
 });
 
 module.exports = router;

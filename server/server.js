@@ -24,6 +24,7 @@ require('./config/passport')(passport);
 
 // Use Routes
 app.use('/api/users', require('./routes/api/users'));
+app.use('/api/tracks', require('./routes/api/tracks'));
 
 // Start server
 app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`));

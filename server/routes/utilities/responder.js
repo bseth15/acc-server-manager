@@ -15,3 +15,5 @@ module.exports.onSuccess = function (message, body) {
 module.exports.onFailure = function (message, error) {
   return { success: false, msg: message, body: null, error: error };
 };
+
+module.exports.noMongo__V = ['-__v'];
