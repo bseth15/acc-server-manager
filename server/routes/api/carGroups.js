@@ -15,8 +15,8 @@ router.post('/', passport.authenticate(...authOptions), (req, res) => {
   let newCarGroup = new CarGroup({ ...req.body });
   newCarGroup
     .save()
-    .then(track => {
-      return Track.findById(track._id).populate('lastModifiedBy', 'username');
+    .then(carGroup => {
+      return CarGroup.findById(carGroup._id).populate('lastModifiedBy', ['username', 'email']);
     })
     .then(carGroup => res.status(200).json(onSuccess('Successfully added Car Group', carGroup)))
     .catch(error => res.status(400).json(onFailure('Unable to add Car Group', error)));

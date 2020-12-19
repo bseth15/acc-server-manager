@@ -7,7 +7,6 @@ const User = require('./User');
  * Schema definition for the Car Model model.
  */
 const carModelSchema = new Schema({
-  // TODO: Validate each object is a group
   carGroups: [
     {
       type: ObjectId,
