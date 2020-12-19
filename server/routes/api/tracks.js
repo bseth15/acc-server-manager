@@ -12,7 +12,11 @@ const authOptions = config.authOptions;
  * @access Private
  */
 router.post('/', passport.authenticate(...authOptions), (req, res) => {
-  let newTrack = new Track({ ...req.body });
+  let newTrack = new Track({
+    lastModifiedBy: req.user._id,
+    value: req.body.name.toLowerCase().replace(' ', '_').concat('_', req.body.season),
+    ...req.body,
+  });
   newTrack
     .save()
     .then(track => {
@@ -58,7 +62,18 @@ router.get('/:id', passport.authenticate(...authOptions), (req, res) => {
  */
 router.patch('/:id', passport.authenticate(...authOptions), (req, res) => {
   const { _id, ...updateFields } = req.body;
-  Track.findByIdAndUpdate(req.params.id, { $set: { ...updateFields } }, patchOptions)
+  Track.findByIdAndUpdate(
+    req.params.id,
+    {
+      $set: {
+        lastModfiedDate: Date.now(),
+        lastModifiedBy: req.user._id,
+        value: req.body.name.toLowerCase().replace(' ', '_').concat('_', req.body.season),
+        ...updateFields,
+      },
+    },
+    patchOptions
+  )
     .populate('lastModifiedBy', ['username', 'email'])
     .then(track => res.status(200).json(onSuccess('Successfully updated Track', track)))
     .catch(error => res.status(400).json(onFailure('Unable to update Track', error)));

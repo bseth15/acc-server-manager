@@ -12,7 +12,7 @@ const authOptions = config.authOptions;
  * @access Private
  */
 router.post('/', passport.authenticate(...authOptions), (req, res) => {
-  let newCarGroup = new CarGroup({ ...req.body });
+  let newCarGroup = new CarGroup({ lastModifiedBy: req.user._id, ...req.body });
   newCarGroup
     .save()
     .then(carGroup => {
@@ -60,7 +60,11 @@ router.get('/:id', passport.authenticate(...authOptions), (req, res) => {
  */
 router.patch('/:id', passport.authenticate(...authOptions), (req, res) => {
   const { _id, ...updateFields } = req.body;
-  CarGroup.findByIdAndUpdate(req.params.id, { $set: { ...updateFields } }, patchOptions)
+  CarGroup.findByIdAndUpdate(
+    req.params.id,
+    { $set: { lastModifiedDate: Date.now(), lastModifiedBy: req.user._id, ...updateFields } },
+    patchOptions
+  )
     .populate('lastModifiedBy', ['username', 'email'])
     .then(carGroup => res.status(200).json(onSuccess('Successfully updated Car Group', carGroup)))
     .catch(error => res.status(400).json(onFailure('Unable to update Car Group', error)));
