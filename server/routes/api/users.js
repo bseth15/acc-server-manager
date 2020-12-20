@@ -48,8 +48,8 @@ router.post('/', (req, res) => {
       newUser.password = hash;
       newUser.save();
     })
-    .then(() => res.status(200).json(onSuccess('Successfully created User', null)))
-    .catch(error => res.status(400).json(onFailure('Unable to create User', error)));
+    .then(() => res.status(200).json(onSuccess('Successfully registered User', null)))
+    .catch(error => res.status(400).json(onFailure('Unable to register User', error)));
 });
 
 /**
