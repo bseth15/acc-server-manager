@@ -14,7 +14,7 @@ services:
       - '$SERVER_PORT:$SERVER_PORT'
     volumes:
       - ./server/:/opt/accsm/code
-      - accsm-node_modules:/opt/accsm/node_modules
+      - accsm-node_modules:/opt/accsm/code/node_modules
     environment:
       - PORT=${SERVER_PORT}
       - MONGO_URI=${MONGO_URI}

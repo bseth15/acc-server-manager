@@ -2,9 +2,15 @@ const cors = require('cors');
 const express = require('express');
 const morgan = require('morgan');
 const passport = require('passport');
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
 const PORT = process.env.PORT || 3000;
 const app = express();
+
+// Setup Swagger Docs
+const swaggerDocs = swaggerJsDoc(require('./config/swagger'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Connect to Database
 require('./config/database')();
