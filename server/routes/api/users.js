@@ -22,7 +22,7 @@ router.post('/', (req, res) => {
     .then(salt => bcrypt.hash(newUser.password, salt))
     .then(hash => {
       newUser.password = hash;
-      newUser.save();
+      return newUser.save();
     })
     .then(() => res.status(200).json(onSuccess('Successfully registered User', null)))
     .catch(error => res.status(400).json(onFailure('Unable to register User', error)));
@@ -53,9 +53,10 @@ router.post('/authenticate', (req, res) => {
         })
     )
     .then(user => {
-      const { password, __v, ...rest } = user.toJSON();
+      const { _id, username, ...rest } = user.toJSON();
       return {
-        user: { ...rest },
+        id: _id,
+        username: username,
         token: 'JWT ' + jwt.sign(user.toJSON(), process.env.JWT_SECRET, { expiresIn: 86400 }),
       };
     })
@@ -71,7 +72,9 @@ router.post('/authenticate', (req, res) => {
 router.get('/', passport.authenticate(...authOptions), (req, res) => {
   User.find()
     .select(selectOptions)
+    .collation({ locale: 'en' })
     .sort({ username: 1 })
+    .exec()
     .then(users => res.status(200).json(onSuccess('Successfully retrieved Users', users)))
     .catch(error => res.status(400).json(onFailure('Unable to retrieve Users', error)));
 });

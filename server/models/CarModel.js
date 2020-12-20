@@ -6,36 +6,39 @@ const User = require('./User');
 /**
  * Schema definition for the Car Model model.
  */
-const carModelSchema = new Schema({
-  carGroups: [
-    {
-      type: ObjectId,
-      ref: CarGroup,
+const carModelSchema = new Schema(
+  {
+    carGroups: [
+      {
+        type: ObjectId,
+        ref: CarGroup,
+      },
+    ],
+    hidden: {
+      type: Boolean,
+      default: true,
     },
-  ],
-  hidden: {
-    type: Boolean,
-    default: true,
+    lastModifiedBy: {
+      type: ObjectId,
+      ref: User,
+      required: true,
+    },
+    lastModifiedDate: {
+      type: Date,
+      default: Date.now,
+    },
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    value: {
+      type: Number,
+      required: true,
+      unique: true,
+    },
   },
-  lastModifiedBy: {
-    type: ObjectId,
-    ref: User,
-    required: true,
-  },
-  lastModifiedDate: {
-    type: Date,
-    default: Date.now,
-  },
-  name: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  value: {
-    type: Number,
-    required: true,
-    unique: true,
-  },
-});
+  { versionKey: false }
+);
 
 module.exports = model('CarModel', carModelSchema);
