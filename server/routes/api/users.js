@@ -30,10 +30,10 @@ router.post('/', (req, res) => {
 
 /**
  * Authenticate a User
- * @route POST api/users/authorize
+ * @route POST api/users/authenticate
  * @access Public
  */
-router.post('/authorize', (req, res) => {
+router.post('/authenticate', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
   User.findOne({ username: username })
@@ -53,7 +53,7 @@ router.post('/authorize', (req, res) => {
         })
     )
     .then(user => {
-      const { password, ...rest } = user.toJSON();
+      const { password, __v, ...rest } = user.toJSON();
       return {
         user: { ...rest },
         token: 'JWT ' + jwt.sign(user.toJSON(), process.env.JWT_SECRET, { expiresIn: 86400 }),

@@ -65,4 +65,4 @@ const userSchema = new Schema({
 
 module.exports = model('User', userSchema);
 
-module.exports.safeSelectOptions = ['-password'];
+module.exports.safeSelectOptions = ['-password', '-__v'];

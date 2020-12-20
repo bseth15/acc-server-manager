@@ -1,19 +1,36 @@
 const mongoose = require('mongoose');
 
-const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-      useCreateIndex: true,
-      autoIndex: true,
-    });
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
-  } catch (error) {
-    console.error(error);
-    process.exit(1);
-  }
+const mongoOptions = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+  useCreateIndex: true,
+  autoIndex: true,
 };
 
-module.exports = connectDB;
+function connect() {
+  return new Promise((resolve, reject) => {
+    mongoose
+      .connect(process.env.MONGO_URI, mongoOptions)
+      .then(() => resolve())
+      .catch(err => reject(err));
+  });
+}
+
+function disconnect() {
+  return mongoose.disconnect();
+}
+
+mongoose.connection.on('connected', () => {
+  console.log(`connected to mongodb on host: ${mongoose.connection.host}`);
+});
+
+mongoose.connection.on('error', error => {
+  console.log(`error connecting to mongodb: ${error}`);
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.log('disconnected from mongodb');
+});
+
+module.exports = { connect, disconnect };
