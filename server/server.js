@@ -38,6 +38,7 @@ const server = app.listen(
   console.log(`server running in ${process.env.NODE_ENV} mode listening on port ${PORT}...`)
 );
 
+// Gracefully shutdown server
 process.on('SIGINT', () => shutdown('SIGINT'));
 
 process.on('SIGTERM', () => shutdown('SIGTERM'));
