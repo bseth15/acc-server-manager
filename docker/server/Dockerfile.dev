@@ -8,7 +8,7 @@ WORKDIR /opt/accsm
 
 # Install Dependencies
 COPY package*.json ./
-RUN npm install --no-optional && npm cache clean --force
+RUN npm ci --quiet
 ENV PATH /opt/accsm/node_modules/.bin:$PATH
 
 # Copy app source code
@@ -17,4 +17,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["npm", "run", "devStart"]
+CMD ["nodemon", "-L", "server.js"]

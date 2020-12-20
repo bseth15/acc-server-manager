@@ -6,6 +6,10 @@ const root = './pictures'; // placeholder image storage location
  * Schema definition for the User model.
  */
 const userSchema = new Schema({
+  authorized: {
+    type: Boolean,
+    default: false,
+  },
   avatar: {
     type: String,
     get: v => `${root}${v}`,
