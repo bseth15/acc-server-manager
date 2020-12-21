@@ -1,0 +1,6 @@
+administrator:
+  username: 'admin'
+  password: 'password1234'
+  email: 'admin@gmail.com'
+  role: 'administrator'
+  authorized: true
