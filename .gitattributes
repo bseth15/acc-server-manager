@@ -1,1 +1,3 @@
+# prevent crlf line endings being added because they
+# will cause an error when app-user.sh is ran
 * text=auto eol=lf
