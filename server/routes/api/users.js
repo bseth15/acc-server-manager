@@ -65,6 +65,19 @@ router.post('/authenticate', (req, res) => {
 });
 
 /**
+ * Retrieve's the number of users in the database
+ * @route GET api/users/count
+ * @access Public
+ */
+router.get('/count', (req, res) => {
+  User.find()
+    .then(users =>
+      res.status(200).json(onSuccess('Successfully retrieved User count', { length: users.length }))
+    )
+    .catch(error => res.status(500).json(onFailure('Unable to retrieve Users length', error)));
+});
+
+/**
  * Retrieve all Users
  * @route GET api/users
  * @access Private

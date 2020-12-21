@@ -8,7 +8,8 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 // Connect to database
-setTimeout(() => database.connect(), 1000);
+const admin = require('./config/admin-user');
+setTimeout(() => database.connect().then(() => admin.initAdminAccount()), 1000);
 
 // Middleware
 app.use(cors());

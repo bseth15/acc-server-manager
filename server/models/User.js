@@ -48,7 +48,7 @@ const userSchema = new Schema(
       type: String,
       trim: true,
       lowercase: true,
-      enum: ['administrator', 'moderator', 'owner', 'member'],
+      enum: ['administrator', 'moderator', 'member'],
       default: 'member',
     },
     steamId: {
