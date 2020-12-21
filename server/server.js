@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 // Connect to database
-const admin = require('./config/admin-user');
+const admin = require('./config/admin-account');
 setTimeout(() => database.connect().then(() => admin.initAdminAccount()), 1000);
 
 // Middleware
@@ -27,11 +27,11 @@ require('./config/passport')(passport);
 // Use Routes
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/tracks', require('./routes/api/tracks'));
-app.use('/api/car-models', require('./routes/api/carModels'));
-app.use('/api/car-groups', require('./routes/api/carGroups'));
-app.use('/api/driver-categories', require('./routes/api/driverCategories'));
-app.use('/api/cup-categories', require('./routes/api/cupCategories'));
-app.use('/api/session-types', require('./routes/api/sessionTypes'));
+app.use('/api/car-models', require('./routes/api/car-models'));
+app.use('/api/car-groups', require('./routes/api/car-groups'));
+app.use('/api/driver-categories', require('./routes/api/driver-categories'));
+app.use('/api/cup-categories', require('./routes/api/cup-categories'));
+app.use('/api/session-types', require('./routes/api/session-types'));
 
 // Start server
 const server = app.listen(

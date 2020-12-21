@@ -13,8 +13,8 @@ const userSchema = new Schema(
     },
     avatar: {
       type: String,
-      get: v => `${root}${v}`,
-      default: '/0.png',
+      get: v => `${root}/${v}`,
+      default: '0.png',
     },
     biography: {
       type: String,

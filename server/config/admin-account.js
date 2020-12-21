@@ -30,7 +30,7 @@ const initAdminAccount = async () => {
 async function loadAccountDetails() {
   let data, contents;
   try {
-    contents = fs.readFileSync(path.join(process.cwd(), 'adminUserAccount.yml'), 'utf8');
+    contents = fs.readFileSync(path.join(process.cwd(), 'admin-account.yml'), 'utf8');
     data = yaml.safeLoad(contents);
   } catch (e) {
     return console.log('unable to read admin account config file ', e);
