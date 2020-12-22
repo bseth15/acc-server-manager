@@ -5,7 +5,7 @@ const yaml = require('js-yaml');
 
 const initAdminAccount = async () => {
   const axiosConfig = {
-    baseURL: `http://localhost:${process.env.PORT}/api`,
+    baseURL: `http://localhost:${process.env.PORT}`,
     headers: {
       'Content-Type': 'application/json',
     },

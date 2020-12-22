@@ -1,7 +1,8 @@
 {
-  "name": "acc-server-manager",
+  "name": "accsm-server",
   "version": "0.1.0",
-  "description": "Dockerized server management application for Assetto Corsa Competizione built using the MERN stack.",
+  "description": "An Express backend providing a RESTful API for the Assetto Corsa Competizione Server Manager",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com:bseth15/acc-server-manager.git"
@@ -9,7 +10,6 @@
   "homepage": "https://github.com/bseth15/",
   "author": "Seth Brown",
   "license": "MIT",
-  "private": true,
   "bugs": {
     "url": "https://github.com/bseth15/acc-server-manager/issues"
   },

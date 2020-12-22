@@ -1,27 +1,61 @@
 version: '3.9'
 
 services:
+  nginx:
+    container_name: accsm-nginx
+    restart: always
+    build:
+      context: docker/nginx/.
+      dockerfile: Dockerfile.dev
+    networks:
+      - accsm-network
+    ports:
+      - '8080:80'
+    links:
+      - react:react
+      - node:node
+
+  react:
+    container_name: accsm-react
+    build:
+      context: client/.
+      dockerfile: ../docker/client/Dockerfile.dev
+    command: ash -c "rm -rf /opt/accsm/code/node_models/* && npm run start"
+    restart: always
+    stdin_open: true
+    networks:
+      - accsm-network
+    ports:
+      - '$REACT_PORT:$REACT_PORT'
+    volumes:
+      - ./client/:/opt/accsm/code
+      - accsm-frontend-node_modules:/opt/accsm/code/node_modules
+    environment:
+      - BROWSER=none
+
   node:
     container_name: accsm-node
     build:
       context: server/.
       dockerfile: ../docker/server/Dockerfile.dev
-    command: bash -c "rm -rf /opt/accsm/code/node_modules/* && nodemon -L server.js"
+    command: ash -c "rm -rf /opt/accsm/code/node_modules/* && nodemon -L server.js"
     restart: always
     networks:
       - accsm-network
     ports:
-      - '$SERVER_PORT:$SERVER_PORT'
+      - '$SERVER_PORT'
     volumes:
       - ./server/:/opt/accsm/code
-      - accsm-node_modules:/opt/accsm/code/node_modules
+      - accsm-backend-node_modules:/opt/accsm/code/node_modules
     environment:
       - PORT=${SERVER_PORT}
       - MONGO_URI=${MONGO_URI}
       - JWT_SECRET=${JWT_SECRET}
       - NODE_ENV=${NODE_ENV}
+    links:
+      - mongo:mongo
     depends_on:
-      - mongo
+      - 'mongo'
 
   mongo:
     container_name: accsm-mongo
@@ -49,4 +83,5 @@ networks:
     driver: bridge
 
 volumes:
-  accsm-node_modules:
+  accsm-backend-node_modules:
+  accsm-frontend-node_modules:

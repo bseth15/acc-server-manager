@@ -25,13 +25,13 @@ if (process.env.NODE_ENV === 'development') {
 require('./config/passport')(passport);
 
 // Use Routes
-app.use('/api/users', require('./routes/api/users'));
-app.use('/api/tracks', require('./routes/api/tracks'));
-app.use('/api/car-models', require('./routes/api/car-models'));
-app.use('/api/car-groups', require('./routes/api/car-groups'));
-app.use('/api/driver-categories', require('./routes/api/driver-categories'));
-app.use('/api/cup-categories', require('./routes/api/cup-categories'));
-app.use('/api/session-types', require('./routes/api/session-types'));
+app.use('/users', require('./routes/api/users'));
+app.use('/tracks', require('./routes/api/tracks'));
+app.use('/car-models', require('./routes/api/car-models'));
+app.use('/car-groups', require('./routes/api/car-groups'));
+app.use('/driver-categories', require('./routes/api/driver-categories'));
+app.use('/cup-categories', require('./routes/api/cup-categories'));
+app.use('/session-types', require('./routes/api/session-types'));
 
 // Start server
 const server = app.listen(
