@@ -1,20 +1,15 @@
 # Dockerfile for Node Express Backend api (development)
 
-FROM node:slim
+FROM node:alpine
 
-# Create App Directory
-RUN mkdir -p /opt/accsm/code
+# Create App Directory 
 WORKDIR /opt/accsm
 
 # Install Dependencies
 COPY package*.json ./
-RUN npm ci --quiet
+RUN npm install
 ENV PATH /opt/accsm/node_modules/.bin:$PATH
 
-# Copy app source code
+# Create Code Directory and Copy App Source Code
 WORKDIR /opt/accsm/code
 COPY . .
-
-EXPOSE 3000
-
-CMD ["nodemon", "-L", "server.js"]

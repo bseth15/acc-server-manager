@@ -1,41 +1,44 @@
 const axios = require('axios').default;
-const fs = require('fs');
-const path = require('path');
-const yaml = require('js-yaml');
+
+const { APP_INIT_ADMIN_ACCOUNT, APP_INIT_ADMIN_PASSWORD, APP_INIT_ADMIN_EMAIL } = process.env;
 
 const initAdminAccount = async () => {
-  const axiosConfig = {
-    baseURL: `http://localhost:${process.env.PORT}/api`,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    responseType: 'json',
-  };
+  if (APP_INIT_ADMIN_ACCOUNT && APP_INIT_ADMIN_PASSWORD && APP_INIT_ADMIN_EMAIL) {
+    const axiosConfig = {
+      baseURL: `http://localhost:${process.env.PORT}`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      responseType: 'json',
+    };
 
-  const adminAccount = await loadAccountDetails();
-
-  axios
-    .get('/users/count', axiosConfig)
-    .then(res => {
-      if (res.status === 200 && res.data.body.length === 0) return;
-      else throw 'admin account init is not available';
-    })
-    .then(() => {
-      return axios.post('/users', adminAccount, axiosConfig);
-    })
-    .then(res => console.log(res.data.msg))
-    .catch(error => console.log(error));
-};
-
-async function loadAccountDetails() {
-  let data, contents;
-  try {
-    contents = fs.readFileSync(path.join(process.cwd(), 'admin-account.yml'), 'utf8');
-    data = yaml.safeLoad(contents);
-  } catch (e) {
-    return console.log('unable to read admin account config file ', e);
+    // check if any users already exist
+    axios
+      .get('/users/count', axiosConfig)
+      .then(res => {
+        if (res.status !== 200) throw 'unable to contact admin account init';
+        else if (res.data.body.length !== 0)
+          throw 'admin account init is unavailable, a user account already exists';
+        else return;
+      })
+      .then(() => {
+        return axios.post(
+          '/users',
+          {
+            username: APP_INIT_ADMIN_ACCOUNT,
+            password: APP_INIT_ADMIN_PASSWORD,
+            email: APP_INIT_ADMIN_EMAIL,
+            role: 'administrator',
+            authorized: true,
+          },
+          axiosConfig
+        );
+      })
+      .then(() => console.log(`successfully created account for ${APP_INIT_ADMIN_ACCOUNT}`))
+      .catch(error => console.log(error));
+  } else {
+    console.log('admin account details not set, skipping initialization');
   }
-  return data.administrator;
-}
+};
 
 module.exports = { initAdminAccount };
