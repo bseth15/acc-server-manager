@@ -7,7 +7,6 @@
     "type": "git",
     "url": "git+ssh://git@github.com:bseth15/acc-server-manager.git"
   },
-  "homepage": "https://github.com/bseth15/",
   "author": "Seth Brown",
   "license": "MIT",
   "bugs": {
