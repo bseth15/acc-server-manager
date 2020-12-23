@@ -1,13 +1,16 @@
-# Dockerfile for Node Express Backend api (development)
+# Dockerfile for React Frontend (development)
 
 FROM node:alpine
 
-# Create App Directory 
+# install inotify-tools
+RUN apk add inotify-tools
+
+# Create App Directory
 WORKDIR /opt/accsm
 
 # Install Dependencies
 COPY package*.json ./
-RUN npm ci --silent
+RUN npm install
 ENV PATH /opt/accsm/node_modules/.bin:$PATH
 
 # Create Code Directory and Copy App Source Code

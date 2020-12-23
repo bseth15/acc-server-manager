@@ -6,52 +6,57 @@ services:
     restart: always
     build:
       context: docker/nginx/.
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     networks:
       - accsm-network
     ports:
-      - '8080:80'
+      - '80:80'
     links:
       - react:react
-      - node:node
+      - express:express
 
   react:
     container_name: accsm-react
     build:
       context: client/.
-      dockerfile: ../docker/client/Dockerfile.dev
+      dockerfile: ../docker/client/Dockerfile
     command: ash -c "rm -rf /opt/accsm/code/node_models/* && npm run start"
     restart: always
     stdin_open: true
     networks:
       - accsm-network
     ports:
-      - '$REACT_PORT:$REACT_PORT'
+      - '4200'
     volumes:
       - ./client/:/opt/accsm/code
       - accsm-frontend-node_modules:/opt/accsm/code/node_modules
     environment:
       - BROWSER=none
+      - CHOKIDAR_USEPOLLING=true
+      - PORT=4200
 
-  node:
-    container_name: accsm-node
+  express:
+    container_name: accsm-express
     build:
       context: server/.
-      dockerfile: ../docker/server/Dockerfile.dev
+      dockerfile: ../docker/server/Dockerfile
     command: ash -c "rm -rf /opt/accsm/code/node_modules/* && nodemon -L server.js"
     restart: always
     networks:
       - accsm-network
     ports:
-      - '$SERVER_PORT'
+      - '5000'
     volumes:
       - ./server/:/opt/accsm/code
       - accsm-backend-node_modules:/opt/accsm/code/node_modules
     environment:
-      - PORT=${SERVER_PORT}
+      - PORT=5000
       - MONGO_URI=${MONGO_URI}
       - JWT_SECRET=${JWT_SECRET}
       - NODE_ENV=${NODE_ENV}
+      - APP_INIT_ADMIN_ACCOUNT=${APP_INIT_ADMIN_ACCOUNT}
+      - APP_INIT_ADMIN_PASSWORD=${APP_INIT_ADMIN_PASSWORD}
+      - APP_INIT_ADMIN_EMAIL=${APP_INIT_ADMIN_EMAIL}
     links:
       - mongo:mongo
     depends_on:
@@ -67,7 +72,7 @@ services:
     networks:
       - accsm-network
     ports:
-      - '$MONGO_PORT:$MONGO_PORT'
+      - '27017:27017'
     volumes:
       - .database:/data/db
     environment:

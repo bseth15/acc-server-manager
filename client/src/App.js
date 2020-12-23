@@ -17,6 +17,9 @@ function App() {
         >
           Learn React
         </a>
+        <p>
+          I have edited the <code>source</code> code.
+        </p>
       </header>
     </div>
   );
